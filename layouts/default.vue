@@ -1,18 +1,33 @@
 <template>
   <a-layout class="min-h-screen">
     <!-- Responsive Sider with mobile handling -->
-    <a-layout-sider :collapsed="isMobile || collapsed" collapsible :trigger="null" :breakpoint="'lg'"
-      @collapse="handleCollapse" @breakpoint="handleBreakpoint" :class="{ 'mobile-sider': isMobile && siderVisible }">
+    <a-layout-sider
+      :collapsed="isMobile || collapsed"
+      collapsible
+      :trigger="null"
+      :breakpoint="'lg'"
+      @collapse="handleCollapse"
+      @breakpoint="handleBreakpoint"
+      :class="{ 'mobile-sider': isMobile && siderVisible }"
+    >
       <!-- Logo Section -->
       <div class="logo p-4 h-16 flex items-center justify-center">
-        <h1 class="text-white text-xl font-bold" v-if="!collapsed || (isMobile && siderVisible)">
+        <h1
+          class="text-white text-xl font-bold"
+          v-if="!collapsed || (isMobile && siderVisible)"
+        >
           Admin
         </h1>
         <h1 class="text-white text-xl font-bold" v-else>AP</h1>
       </div>
 
       <!-- Navigation Menu -->
-      <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" theme="dark" mode="inline">
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        v-model:openKeys="openKeys"
+        theme="dark"
+        mode="inline"
+      >
         <!-- Dashboard -->
         <a-menu-item key="dashboard">
           <template #icon><dashboard-outlined /></template>
@@ -144,52 +159,40 @@
             <NuxtLink to="/reports/inventory">Inventory Report</NuxtLink>
           </a-menu-item>
         </a-sub-menu>
-
-        {{ adminProfile }}
       </a-menu>
     </a-layout-sider>
 
     <!-- Mobile overlay backdrop when sidebar is open -->
-    <div v-if="isMobile && siderVisible" class="fixed inset-0 bg-black bg-opacity-50 z-10"
-      @click="siderVisible = false">
-    </div>
+    <div
+      v-if="isMobile && siderVisible"
+      class="fixed inset-0 bg-black bg-opacity-50 z-10"
+      @click="siderVisible = false"
+    ></div>
 
     <!-- Main Layout -->
     <a-layout>
       <!-- Header -->
-      <a-layout-header class="bg-white px-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+      <a-layout-header
+        class="bg-white px-4 flex justify-between items-center sticky top-0 z-10 shadow-sm"
+      >
         <!-- Left Header Content -->
         <div class="flex items-center">
-          <menu-unfold-outlined v-if="isMobile ? !siderVisible : collapsed" class="trigger text-xl mr-4 cursor-pointer"
-            @click="toggleSider" />
-          <menu-fold-outlined v-else class="trigger text-xl mr-4 cursor-pointer" @click="toggleSider" />
+          <menu-unfold-outlined
+            v-if="isMobile ? !siderVisible : collapsed"
+            class="trigger text-xl mr-4 cursor-pointer"
+            @click="toggleSider"
+          />
+          <menu-fold-outlined
+            v-else
+            class="trigger text-xl mr-4 cursor-pointer"
+            @click="toggleSider"
+          />
           <h1 class="text-lg font-medium md:text-xl lg:hidden">Admin Panel</h1>
         </div>
 
         <!-- Right Header Content -->
         <div class="flex items-center gap-4">
           <!-- Notification Dropdown -->
-          <a-dropdown placement="bottomRight">
-            <a-badge dot>
-              <bell-outlined class="text-xl cursor-pointer" />
-            </a-badge>
-            <template #overlay>
-              <a-menu>
-                <a-menu-item key="notification-1">
-                  <div class="py-1">
-                    <div class="font-medium">New Order Received</div>
-                    <div class="text-xs text-gray-500">5 minutes ago</div>
-                  </div>
-                </a-menu-item>
-                <a-menu-item key="notification-2">
-                  <div class="py-1">
-                    <div class="font-medium">Low Stock Alert</div>
-                    <div class="text-xs text-gray-500">1 hour ago</div>
-                  </div>
-                </a-menu-item>
-              </a-menu>
-            </template>
-          </a-dropdown>
 
           <!-- User Avatar Dropdown -->
           <a-dropdown>
@@ -200,20 +203,14 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item key="profile" @click="showProfile">
-                  <a-spin :spinning="loading" size="small">
-                    Profile
-                  </a-spin>
-                </a-menu-item>
-
-                <a-menu-item key="settings">
-                  <NuxtLink to="/settings">Settings</NuxtLink>
+                  <a-spin :spinning="loading" size="small"> Profile </a-spin>
                 </a-menu-item>
 
                 <a-menu-divider />
 
                 <a-menu-item key="logout" @click="handleLogout">
                   <logout-outlined class="mr-2" />
-                  {{ loginStore.isSpinning ? 'Logging out...' : 'Logout' }}
+                  {{ loginStore.isSpinning ? "Logging out..." : "Logout" }}
                 </a-menu-item>
               </a-menu>
             </template>
@@ -222,24 +219,39 @@
       </a-layout-header>
 
       <!-- Profile Dialog -->
-      <a-modal v-model:open="profileModalVisible" title="Admin Profile" :footer="null" width="500px" centered>
+      <a-modal
+        v-model:open="profileModalVisible"
+        title="Admin Profile"
+        :footer="null"
+        width="500px"
+        centered
+      >
         <div v-if="adminProfile" class="profile-content">
           <!-- Profile Image Section -->
           <div class="profile-image-section">
             <div class="image-container">
-              <a-avatar :src="profileImageUrl" :size="100" class="profile-avatar">
+              <a-avatar
+                :src="profileImageUrl"
+                :size="100"
+                class="profile-avatar"
+              >
                 {{ getAdminInitials(adminProfile) }}
               </a-avatar>
               <div class="image-overlay" @click="handleImageUpload">
                 <CameraOutlined class="camera-icon" />
               </div>
             </div>
-            <input ref="fileInput" type="file" accept="image/*" style="display: none" @change="onImageChange" />
+            <input
+              ref="fileInput"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              @change="onImageChange"
+            />
           </div>
 
           <!-- Profile Information -->
           <a-descriptions :column="1" bordered class="profile-details">
-
             <a-descriptions-item label="Name">
               <div class="profile-name">
                 {{ adminProfile.name }}
@@ -260,8 +272,10 @@
             </a-descriptions-item>
 
             <a-descriptions-item label="Status">
-              <a-badge :status="adminProfile.is_active ? 'success' : 'error'"
-                :text="adminProfile.is_active ? 'Active' : 'Inactive'" />
+              <a-badge
+                :status="adminProfile.is_active ? 'success' : 'error'"
+                :text="adminProfile.is_active ? 'Active' : 'Inactive'"
+              />
             </a-descriptions-item>
 
             <a-descriptions-item label="Created">
@@ -281,7 +295,11 @@
 
           <!-- Action Buttons -->
           <div class="profile-actions">
-            <a-button type="primary" @click="editProfile" :loading="updateLoading">
+            <a-button
+              type="primary"
+              @click="editProfile"
+              :loading="updateLoading"
+            >
               <EditOutlined />
               Edit Profile
             </a-button>
@@ -300,7 +318,11 @@
 
         <!-- Error State -->
         <div v-else-if="error" class="error-container">
-          <a-result status="error" title="Failed to Load Profile" :sub-title="error">
+          <a-result
+            status="error"
+            title="Failed to Load Profile"
+            :sub-title="error"
+          >
             <template #extra>
               <a-button type="primary" @click="fetchAdminProfile">
                 Try Again
@@ -311,22 +333,41 @@
       </a-modal>
 
       <!-- Edit Profile Modal -->
-      <a-modal v-model:open="editModalVisible" title="Edit Profile" :confirm-loading="updateLoading" @ok="updateProfile"
-        @cancel="cancelEdit" width="400px">
-        <a-form ref="formRef" :model="editForm" :rules="formRules" layout="vertical">
+      <a-modal
+        v-model:open="editModalVisible"
+        title="Edit Profile"
+        :confirm-loading="updateLoading"
+        @ok="updateProfile"
+        @cancel="cancelEdit"
+        width="400px"
+      >
+        <a-form
+          ref="formRef"
+          :model="editForm"
+          :rules="formRules"
+          layout="vertical"
+        >
           <a-form-item label="Name" name="name">
-            <a-input v-model:value="editForm.name" placeholder="Enter your name" />
+            <a-input
+              v-model:value="editForm.name"
+              placeholder="Enter your name"
+            />
           </a-form-item>
 
           <a-form-item label="Email" name="email">
-            <a-input v-model:value="editForm.email" placeholder="Enter your email" />
+            <a-input
+              v-model:value="editForm.email"
+              placeholder="Enter your email"
+            />
           </a-form-item>
         </a-form>
       </a-modal>
 
       <!-- Main Content -->
       <a-layout-content class="p-4 md:p-6 h-[calc(100vh-64px)] overflow-hidden">
-        <div class="bg-white p-4 md:p-6 rounded-md shadow-sm h-full overflow-y-auto">
+        <div
+          class="bg-white p-4 md:p-6 rounded-md shadow-sm h-full overflow-y-auto"
+        >
           <slot />
         </div>
       </a-layout-content>
@@ -335,351 +376,359 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, reactive, nextTick, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { message } from 'ant-design-vue'
-import { useLoginStore } from '~/stores/login/loginStore';
-import type { FormInstance } from 'ant-design-vue'
+import { ref, computed, watch, reactive, nextTick, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { message } from "ant-design-vue";
+import { useLoginStore } from "~/stores/login/loginStore";
+import type { FormInstance } from "ant-design-vue";
 
 // Reactive state
-const collapsed = ref(false)
-const isMobile = ref(false)
-const siderVisible = ref(false)
-const openKeys = ref<string[]>([])
+const collapsed = ref(false);
+const isMobile = ref(false);
+const siderVisible = ref(false);
+const openKeys = ref<string[]>([]);
 
 // Store and router instances
-const route = useRoute()
-const loginStore = useLoginStore()
+const route = useRoute();
+const loginStore = useLoginStore();
 
 // Menu selection logic
 const selectedKeys = computed(() => {
-  const path = route.path
+  const path = route.path;
 
   // Route to menu key mapping
   const routeMapping: Record<string, string> = {
-    '/': 'dashboard',
-    '/users': 'users-list',
-    '/users/customer': 'users-customer',
-    '/roles': 'role-list',
-    '/roles/permission': 'permission-list',
-    '/categories': 'categories-list',
-    '/categories/group': 'categories-group',
-    '/sizes': 'sizes-list',
-    '/sizes/group': 'size-group',
-    '/promotions/discounts': 'discounts',
-    '/products': 'products-list',
-    '/orders': 'orders-list',
-    '/reports/inventory': 'reports-inventory',
-    '/settings/profile': 'profile',
-    '/settings': 'settings'
-  }
+    "/": "dashboard",
+    "/users": "users-list",
+    "/users/customer": "users-customer",
+    "/roles": "role-list",
+    "/roles/permission": "permission-list",
+    "/categories": "categories-list",
+    "/categories/group": "categories-group",
+    "/sizes": "sizes-list",
+    "/sizes/group": "size-group",
+    "/promotions/discounts": "discounts",
+    "/products": "products-list",
+    "/orders": "orders-list",
+    "/reports/inventory": "reports-inventory",
+    "/settings/profile": "profile",
+    "/settings": "settings",
+  };
 
   // Check for exact matches first
   if (routeMapping[path]) {
-    return [routeMapping[path]]
+    return [routeMapping[path]];
   }
 
   // Check for path prefixes
-  if (path.startsWith('/deliveries')) return ['deliveries']
-  if (path.startsWith('/brands')) return ['brands']
-  if (path.startsWith('/banners')) return ['banners']
-  if (path.startsWith('/seasons')) return ['seasons']
-  if (path.startsWith('/colors')) return ['colors']
+  if (path.startsWith("/deliveries")) return ["deliveries"];
+  if (path.startsWith("/brands")) return ["brands"];
+  if (path.startsWith("/banners")) return ["banners"];
+  if (path.startsWith("/seasons")) return ["seasons"];
+  if (path.startsWith("/colors")) return ["colors"];
 
-  return []
-})
+  return [];
+});
 
 // Auto-expand parent menus when child items are selected
-watch(selectedKeys, (newKeys) => {
-  if (newKeys.length > 0) {
-    const key = newKeys[0]
+watch(
+  selectedKeys,
+  (newKeys) => {
+    if (newKeys.length > 0) {
+      const key = newKeys[0];
 
-    // Menu hierarchy mapping
-    const menuHierarchy: Record<string, string> = {
-      'categories-list': 'categories',
-      'categories-group': 'categories',
-      'sizes-list': 'sizes',
-      'size-group': 'sizes',
-      'discounts': 'promotions',
-      'users-list': 'users',
-      'users-customer': 'users',
-      'role-list': 'roles',
-      'permission-list': 'roles',
-      'products-list': 'products',
-      'orders-list': 'orders',
-      'reports-inventory': 'reports'
-    }
+      // Menu hierarchy mapping
+      const menuHierarchy: Record<string, string> = {
+        "categories-list": "categories",
+        "categories-group": "categories",
+        "sizes-list": "sizes",
+        "size-group": "sizes",
+        discounts: "promotions",
+        "users-list": "users",
+        "users-customer": "users",
+        "role-list": "roles",
+        "permission-list": "roles",
+        "products-list": "products",
+        "orders-list": "orders",
+        "reports-inventory": "reports",
+      };
 
-    const parentKey = menuHierarchy[key]
-    if (parentKey && !openKeys.value.includes(parentKey)) {
-      openKeys.value = [...openKeys.value, parentKey]
+      const parentKey = menuHierarchy[key];
+      if (parentKey && !openKeys.value.includes(parentKey)) {
+        openKeys.value = [...openKeys.value, parentKey];
+      }
     }
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+);
 
 // Event handlers
 const handleCollapse = (isCollapsed: boolean) => {
-  collapsed.value = isCollapsed
-}
+  collapsed.value = isCollapsed;
+};
 
 const handleBreakpoint = (broken: boolean) => {
-  isMobile.value = broken
+  isMobile.value = broken;
   if (broken) {
-    collapsed.value = false
-    siderVisible.value = false
+    collapsed.value = false;
+    siderVisible.value = false;
   }
-}
+};
 
 const toggleSider = () => {
   if (isMobile.value) {
-    siderVisible.value = !siderVisible.value
+    siderVisible.value = !siderVisible.value;
   } else {
-    collapsed.value = !collapsed.value
+    collapsed.value = !collapsed.value;
   }
-}
+};
 
 // Logout functionality using Pinia store
 const handleLogout = async () => {
-  if (loginStore.isSpinning) return // Prevent multiple logout attempts
+  if (loginStore.isSpinning) return; // Prevent multiple logout attempts
 
   try {
-    await loginStore.fetchLogout()
-    message.success('Logged out successfully')
+    await loginStore.fetchLogout();
+    message.success("Logged out successfully");
   } catch (error) {
-    console.error('Logout error:', error)
-    message.error('Failed to logout. Please try again.')
+    console.error("Logout error:", error);
+    message.error("Failed to logout. Please try again.");
   }
-}
+};
 
 export interface AdminProfileResponse {
-  status: number
-  message: string
-  data: AdminProfile
+  status: number;
+  message: string;
+  data: AdminProfile;
 }
 
 export interface AdminProfile {
-  id: number
-  name: string
-  email: string
-  roles: string
-  profile_image: string | null
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  id: number;
+  name: string;
+  email: string;
+  roles: string;
+  profile_image: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 // Reactive variables
-const adminProfile = ref<AdminProfile | null>(null)
-const loading = ref(false)
-const updateLoading = ref(false)
-const error = ref<string | null>(null)
-const profileModalVisible = ref(false)
-const editModalVisible = ref(false)
-const fileInput = ref<HTMLInputElement>()
-const formRef = ref<FormInstance>()
+const adminProfile = ref<AdminProfile | null>(null);
+const loading = ref(false);
+const updateLoading = ref(false);
+const error = ref<string | null>(null);
+const profileModalVisible = ref(false);
+const editModalVisible = ref(false);
+const fileInput = ref<HTMLInputElement>();
+const formRef = ref<FormInstance>();
 
 // Cache-busted image URL to prevent browser caching issues
 const profileImageUrl = computed(() => {
-  if (!adminProfile.value?.profile_image) return undefined
+  if (!adminProfile.value?.profile_image) return undefined;
   // Add timestamp to prevent caching issues
-  const timestamp = Date.now()
-  const baseUrl = adminProfile.value.profile_image
-  const separator = baseUrl.includes('?') ? '&' : '?'
-  return `${baseUrl}${separator}v=${timestamp}`
-})
+  const timestamp = Date.now();
+  const baseUrl = adminProfile.value.profile_image;
+  const separator = baseUrl.includes("?") ? "&" : "?";
+  return `${baseUrl}${separator}v=${timestamp}`;
+});
 
 // Edit form
 const editForm = reactive({
-  name: '',
-  email: ''
-})
+  name: "",
+  email: "",
+});
 
 const formRules = {
   name: [
-    { required: true, message: 'Please input your name!' },
-    { min: 2, message: 'Name must be at least 2 characters!' }
+    { required: true, message: "Please input your name!" },
+    { min: 2, message: "Name must be at least 2 characters!" },
   ],
   email: [
-    { required: true, message: 'Please input your email!' },
-    { type: 'email' as const, message: 'Please input a valid email!' }
-  ]
-}
+    { required: true, message: "Please input your email!" },
+    { type: "email" as const, message: "Please input a valid email!" },
+  ],
+};
 
 // Fetch admin profile - corrected to handle single object response
 const fetchAdminProfile = async () => {
-  loading.value = true
-  error.value = null
+  loading.value = true;
+  error.value = null;
 
   try {
-    const { data } = await useFetchDataApi<AdminProfileResponse>('/profile')
+    const { data } = await useFetchDataApi<AdminProfileResponse>("/profile");
 
     if (data.value?.status === 200 && data.value.data) {
-      adminProfile.value = data.value.data
+      adminProfile.value = data.value.data;
     } else {
-      error.value = data.value?.message || 'Failed to fetch profile'
-      message.error(error.value)
+      error.value = data.value?.message || "Failed to fetch profile";
+      message.error(error.value);
     }
   } catch (err: any) {
-    console.error('❌ Fetch Error:', err)
-    error.value = 'Failed to fetch admin profile'
-    message.error(error.value)
+    console.error("❌ Fetch Error:", err);
+    error.value = "Failed to fetch admin profile";
+    message.error(error.value);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Show profile dialog
 const showProfile = async () => {
-  profileModalVisible.value = true
+  profileModalVisible.value = true;
   if (!adminProfile.value) {
-    await fetchAdminProfile()
+    await fetchAdminProfile();
   }
-}
+};
 
 // Refresh profile
 const refreshProfile = async () => {
-  await fetchAdminProfile()
-}
+  await fetchAdminProfile();
+};
 
 // Edit profile functions
 const editProfile = () => {
   if (adminProfile.value) {
-    editForm.name = adminProfile.value.name
-    editForm.email = adminProfile.value.email
-    editModalVisible.value = true
+    editForm.name = adminProfile.value.name;
+    editForm.email = adminProfile.value.email;
+    editModalVisible.value = true;
   }
-}
+};
 
 const updateProfile = async () => {
-  if (!formRef.value) return
+  if (!formRef.value) return;
 
   try {
-    await formRef.value.validateFields()
-    updateLoading.value = true
+    await formRef.value.validateFields();
+    updateLoading.value = true;
 
-    const formData = new FormData()
-    formData.append('_method', 'PUT')
-    formData.append('name', editForm.name)
-    formData.append('email', editForm.email)
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append("name", editForm.name);
+    formData.append("email", editForm.email);
 
-    const { data } = await useFetchDataApi<AdminProfileResponse>('/profile', {
-      method: 'POST',
-      body: formData
-    })
-console.log("data.value?.status=================", data.value?.status, "--------", data);
+    const { data } = await useFetchDataApi<AdminProfileResponse>("/profile", {
+      method: "POST",
+      body: formData,
+    });
+    console.log(
+      "data.value?.status=================",
+      data.value?.status,
+      "--------",
+      data
+    );
     if (data.value?.data) {
-      await fetchAdminProfile()
-      message.success('Profile updated successfully!')
-      editModalVisible.value = false
+      await fetchAdminProfile();
+      message.success("Profile updated successfully!");
+      editModalVisible.value = false;
     } else {
-      message.error(data.value?.message || 'Failed to update profile')
+      message.error(data.value?.message || "Failed to update profile");
     }
   } catch (err: any) {
-    console.error('❌ Update Error:', err)
-    message.error('Failed to update profile')
+    console.error("❌ Update Error:", err);
+    message.error("Failed to update profile");
   } finally {
-    updateLoading.value = false
+    updateLoading.value = false;
   }
-}
-
+};
 
 const cancelEdit = () => {
-  editModalVisible.value = false
+  editModalVisible.value = false;
   if (formRef.value) {
-    formRef.value.resetFields()
+    formRef.value.resetFields();
   }
-}
+};
 
 // Image upload functions
 const handleImageUpload = () => {
-  fileInput.value?.click()
-}
+  fileInput.value?.click();
+};
 
 const onImageChange = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
 
-  if (!file) return
+  if (!file) return;
 
   // Validate file type
-  if (!file.type.startsWith('image/')) {
-    message.error('Please select an image file!')
-    return
+  if (!file.type.startsWith("image/")) {
+    message.error("Please select an image file!");
+    return;
   }
 
   // Validate file size (e.g., 5MB)
   if (file.size > 5 * 1024 * 1024) {
-    message.error('Image size must be less than 5MB!')
-    return
+    message.error("Image size must be less than 5MB!");
+    return;
   }
 
   try {
-    updateLoading.value = true
+    updateLoading.value = true;
 
-    const formData = new FormData()
-    formData.append('_method', 'PUT')
-    formData.append('profile_image', file)
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append("profile_image", file);
 
-    const { data } = await useFetchDataApi<AdminProfileResponse>('/profile', {
-      method: 'POST',
-      body: formData
-    })
+    const { data } = await useFetchDataApi<AdminProfileResponse>("/profile", {
+      method: "POST",
+      body: formData,
+    });
 
     if (data.value?.status === 200) {
-      await fetchAdminProfile()
-      const updatedProfile = data.value.data
-      adminProfile.value = null 
-      await nextTick()
-      adminProfile.value = updatedProfile
+      await fetchAdminProfile();
+      const updatedProfile = data.value.data;
+      adminProfile.value = null;
+      await nextTick();
+      adminProfile.value = updatedProfile;
 
-      message.success('Profile image updated successfully!')
+      message.success("Profile image updated successfully!");
     } else {
-      message.error(data.value?.message || 'Failed to update profile image')
+      message.error(data.value?.message || "Failed to update profile image");
     }
   } catch (err: any) {
-    console.error('❌ Image Upload Error:', err)
-    message.error('Failed to update profile image')
+    console.error("❌ Image Upload Error:", err);
+    message.error("Failed to update profile image");
   } finally {
-    updateLoading.value = false
+    updateLoading.value = false;
     // Clear the input
-    if (target) target.value = ''
+    if (target) target.value = "";
   }
-}
+};
 
 // Utility functions
 const getAdminInitials = (profile: AdminProfile) => {
-  return profile.name.charAt(0).toUpperCase()
-}
+  return profile.name.charAt(0).toUpperCase();
+};
 
 const getRoleColor = (role: string) => {
   const colors: Record<string, string> = {
-    'super_admin': 'red',
-    'admin': 'blue',
-    'manager': 'green',
-    'user': 'default'
-  }
-  return colors[role] || 'default'
-}
+    super_admin: "red",
+    admin: "blue",
+    manager: "green",
+    user: "default",
+  };
+  return colors[role] || "default";
+};
 
 const formatRole = (role: string) => {
-  return role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-}
+  return role.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+};
 
 const formatDate = (date: string) => {
-  if (!date) return 'N/A'
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+  if (!date) return "N/A";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 // Load profile on component mount
 onMounted(async () => {
-  await fetchAdminProfile()
-})
+  await fetchAdminProfile();
+});
 </script>
 
 <style scoped>
