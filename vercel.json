@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "nuxt.config.*",
-      "use": "@vercel/node"
-    }
-  ],
   "env": {
     "NUXT_PUBLIC_API_ENDPOINT": "https://elegantchic.me/api/admin",
     "NUXT_PUBLIC_BASE_URL": "https://elegantchic.me/api/admin"
