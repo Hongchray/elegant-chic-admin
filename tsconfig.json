@@ -1,0 +1,14 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "types": ["@types/node"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],        
+      "#app": ["./.nuxt/app"],
+      "#imports": ["./.nuxt/imports"]
+    }
+  }
+}
